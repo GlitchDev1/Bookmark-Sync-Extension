@@ -4,9 +4,9 @@
     "version": "1.0",
     "description": "Sync selected bookmark folders over GitHub",
     "permissions": ["bookmarks", "storage"],
-    // "background": {
-    //   "service_worker": "background.js"
-    // },
+    "background": {
+      "scripts": ["background.js"]
+    },
     "action": {
       "default_popup": "popup.html",
       "default_icon": {

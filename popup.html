@@ -5,12 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bookmark Folder Access</title>
   <script src="popup.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="common-shared.css">
 </head>
 <body>
   <h1>Bookmark Folder Access</h1>
   <button class="browser-style" id="getBookmarksButton">Get Bookmarks</button>
   <ul id="bookmarksList"></ul>
 
+  <h2>
+    Setup
+  </h2>
   <form id="settingsForm">
     <label for="githubRepo">GitHub Repository:</label>
     <input type="text" id="githubRepo" name="githubRepo">
