@@ -10,16 +10,21 @@
 </head>
 <body>
   <h1>Bookmark Folder Access</h1>
-  <button class="browser-style" id="getBookmarksButton">Get Bookmarks</button>
+  <button id="getBookmarksButton">Get Bookmarks</button>
   <ul id="bookmarksList"></ul>
 
   <h2>
     Setup
   </h2>
-  <form id="settingsForm">
-    <label for="githubRepo">GitHub Repository:</label>
+  <form id="tokenForm">
+    <label for="githubToken">GitHub Access Token</label>
+    <input type="password" id="githubToken" name="githubToken">
+    <button type="submit">Save</button>
+  </form>
+  <form id="repoForm">
+    <label for="githubRepo">GitHub Repository</label>
     <input type="text" id="githubRepo" name="githubRepo">
-    <button class="browser-style" type="submit">Save</button>
+    <button type="submit">Save</button>
   </form>
 </body>
 </html>
