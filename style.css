@@ -1,3 +1,7 @@
 body {
     padding: 10px;
 }
+.bookmarksList {
+    display: flex;
+    flex-direction: column;
+}

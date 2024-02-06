@@ -18,29 +18,23 @@ browser.storage.onChanged.addListener((changes, areaName) => {
   // React to changes in settings here if necessary
 });
 
+
+// Update Bookmark
+
+
 // Event listener for messages from content scripts or other parts of the extension
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   console.log('Message received:', message, 'from sender:', sender);
-  // Process messages and respond if necessary
+  if (message.action == "getBookmarkFolders") {
+    sendResponse(getBookmarkFolders());
+  }
 });
-
-// Function to get bookmarks in a folder
-function getBookmarksInFolder(folderId) {
-  return browser.bookmarks.getChildren(folderId);
-}
-
-// Example: Get bookmarks in the "Bookmarks Toolbar" folder
-getBookmarksInFolder("toolbar_____").then(bookmarks => {
-  console.log(bookmarks);
-});
-
 
 // Function to get bookmark folders
 function getBookmarkFolders() {
-  return browser.bookmarks.getTree()
+  return browser.bookmarks.getSubTree("toolbar_____")
     .then((bookmarks) => {
-      // Filter out only the bookmark folders
-      const folders = extractFolders(bookmarks);
+      const folders = extractFolders(bookmarks[0].children);
       return folders;
     });
 }
@@ -53,10 +47,11 @@ function extractFolders(bookmarks) {
     if (bookmark.type === 'folder') {
       folders.push({
         id: bookmark.id,
-        title: bookmark.title
+        title: bookmark.title,
+        children: []
       });
       if (bookmark.children) {
-        folders = folders.concat(extractFolders(bookmark.children));
+        folders[folders.length - 1].children = extractFolders(bookmark.children);
       }
     }
   });
