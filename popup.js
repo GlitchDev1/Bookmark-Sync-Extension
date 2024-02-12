@@ -15,26 +15,17 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   var repoInputField = document.getElementById("githubRepo");
   var tokenInputField = document.getElementById("githubToken");
+  
   const localStorage = await browser.storage.local.get();
-  repoInputField.value = localStorage.githubRepo == undefined ? "" : localStorage.githubRepo;
-  tokenInputField.value = localStorage.githubToken == undefined ? "" : localStorage.githubToken;
+  if (localStorage.githubRepo === undefined || localStorage.githubToken === undefined) {
+    await browser.tabs.create({
+      active: true,
+      url: '/html/settings.html' 
+    });
+  }
 
-  var tokenForm = document.getElementById("tokenForm");
-
-  tokenForm.addEventListener("submit", function (event) {
-      event.preventDefault();
-      var accessToken = document.getElementById("githubToken").value;
-      browser.storage.local.set({ "githubToken": accessToken });
-  });
-
-  var repoForm = document.getElementById("repoForm");
-
-  repoForm.addEventListener("submit", function (event) {
-    event.preventDefault();
-    var githubRepo = document.getElementById("githubRepo").value;
-    console.log(githubRepo.value);
-    browser.storage.local.set({ "githubRepo": githubRepo.value });
-  });
+  // repoInputField.value = localStorage.githubRepo == undefined ? "" : localStorage.githubRepo;
+  // tokenInputField.value = localStorage.githubToken == undefined ? "" : localStorage.githubToken;
 
   function recursivelyCreateBookmarkElementList(bookmarksList, bookmarks, index) {
     
