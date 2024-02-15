@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Settings | Bookmark Folder Sync</title>
-    <link rel="icon" href="../icons/icon-128.png">
-    <link rel="stylesheet" href="../style.css">
-    <link rel="stylesheet" href="../common-shared.css">
-    <link rel="stylesheet" href="../css/settings.css">
+    <script src="./settings.js"></script>
+    <link rel="stylesheet" href="./settings.css">
+    
+    <link rel="icon" href="../../icons/icon-128.png">
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../../common-shared.css">
 </head>
 
 <body>
@@ -17,12 +18,12 @@
             <h1>
                 Settings
             </h1>
-            <form id="tokenForm" class="settings-form">
+            <form id="tokenForm" class="settings-form" onsubmit="return false">
                 <label for="githubToken">GitHub Access Token</label>
                 <input type="text" id="githubToken" name="githubToken">
                 <button type="submit">Save</button>
             </form>
-            <form id="repoForm" class="settings-form">
+            <form id="repoForm" class="settings-form" onsubmit="return false">
                 <label for="githubRepo">GitHub Repository</label>
                 <input type="text" id="githubRepo" name="githubRepo">
                 <button type="submit">Save</button>

@@ -1,0 +1,16 @@
+.settings-button {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    bottom: 5px;
+    right: 5px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow: visible;
+}
+.settings-button img {
+    width: 100%;
+}

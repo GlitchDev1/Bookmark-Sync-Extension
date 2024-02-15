@@ -1,4 +1,7 @@
-document.addListener("DOMContentLoaded", async function () {
+document.addEventListener("DOMContentLoaded", async function () {
+
+    console.log("Before Loading");
+    await loadSavedValues();
 
     var tokenForm = document.getElementById("tokenForm");
 
@@ -17,3 +20,15 @@ document.addListener("DOMContentLoaded", async function () {
         browser.storage.local.set({ "githubRepo": githubRepo.value });
     });
 });
+
+async function loadSavedValues() {
+
+    console.log("Loading values from localStorage");
+    var repoInputField = document.getElementById("githubRepo");
+    var tokenInputField = document.getElementById("githubToken");
+    
+    const localStorage = await browser.storage.local.get();
+
+    repoInputField.value = localStorage.githubRepo == undefined ? "" : localStorage.githubRepo;
+    tokenInputField.value = localStorage.githubToken == undefined ? "" : localStorage.githubToken;
+}
