@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bookmark Folder Access</title>
+  <script src="./popup.js"></script>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="../../common-shared.css">
+  <link rel="stylesheet" href="./popup.css">
+</head>
+<body>
+  <div class="popup-wrapper">
+    <h1>Bookmark Folder Sync</h1>
+    <form action="">
+      <ul id="bookmarksList" class="bookmarksList"></ul>
+      <div>
+        <button id="getBookmarksButton" type="button">Reload</button>
+        <button type="submit" id="saveBookmarks" name="bookmarks">
+        <label for="bookmarks">Save</label>
+      </div>
+    </form>
+
+    <button class="settings-button" id="settingButton">
+      <img src="../../icons/setting.png" alt="settings">
+    </button>
+  </div>
+</body>
+</html>

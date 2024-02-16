@@ -1,21 +1,13 @@
 document.addEventListener("DOMContentLoaded", async function () {
-
-  var getBookmarksButton = document.getElementById("getBookmarksButton");
-  var bookmarksList = document.getElementById("bookmarksList");
   
-  getBookmarksButton.addEventListener("click", function () {
-    bookmarksList.innerHTML = '';
-  
-    browser.runtime.sendMessage({ action: "getBookmarkFolders", data: undefined }, function(bookmarks) {
-      recursivelyCreateBookmarkElementList(bookmarksList, bookmarks, 0);
-    });
-  });
+  document.getElementById("getBookmarksButton").addEventListener("click", getBookmarks);
+  getBookmarks();
 
   document.getElementById("settingButton")
     .addEventListener("click", async () => { await openSettings(); });
 
   const localStorage = await browser.storage.local.get();
-  if (localStorage.githubRepo === undefined || localStorage.githubToken === undefined) {
+  if (localStorage.githubRepo === undefined || localStorage.githubRepo === "" || localStorage.githubToken === undefined || localStorage.githubToken === "") {
     await openSettings();
   }
 });
@@ -23,9 +15,18 @@ document.addEventListener("DOMContentLoaded", async function () {
 async function openSettings() {
   await browser.tabs.create({
     active: true,
-    url: '/pages/settings/settings.html' 
+    url: '/pages/settings/settings.html'
   });
   window.close();
+}
+
+async function getBookmarks() {
+  const bookmarksList = document.getElementById("bookmarksList");
+  bookmarksList.innerHTML = '';
+  
+  browser.runtime.sendMessage({ action: "getBookmarkFolders", data: undefined }, function(bookmarks) {
+    recursivelyCreateBookmarkElementList(bookmarksList, bookmarks, 0);
+  });
 }
 
 function recursivelyCreateBookmarkElementList(bookmarksList, bookmarks, index) {  

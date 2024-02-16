@@ -21,12 +21,14 @@
             <form id="tokenForm" class="settings-form" onsubmit="return false">
                 <label for="githubToken">GitHub Access Token</label>
                 <input type="text" id="githubToken" name="githubToken">
-                <button type="submit">Save</button>
+                <button id="saveToken" type="submit">Save</button>
+                <button id="editToken" class="hidden" type="button">Edit</button>
             </form>
             <form id="repoForm" class="settings-form" onsubmit="return false">
                 <label for="githubRepo">GitHub Repository</label>
                 <input type="text" id="githubRepo" name="githubRepo">
-                <button type="submit">Save</button>
+                <button id="saveRepo" type="submit">Save</button>
+                <button id="editRepo" class="hidden" type="button">Edit</button>
             </form>
         </div>
     </div>
