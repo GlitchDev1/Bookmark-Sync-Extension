@@ -1,7 +1,8 @@
+let allBookmarks = undefined;
 document.addEventListener("DOMContentLoaded", async function () {
   
-  document.getElementById("getBookmarksButton").addEventListener("click", getBookmarks);
-  getBookmarks();
+  loadBookmarks();
+  document.getElementById("getBookmarksButton").addEventListener("click", loadBookmarks);
 
   document.getElementById("settingButton")
     .addEventListener("click", async () => { await openSettings(); });
@@ -20,13 +21,20 @@ async function openSettings() {
   window.close();
 }
 
-async function getBookmarks() {
+async function loadBookmarks() {  
+  browser.runtime.sendMessage({ action: "getBookmarkFolders", data: undefined }, handleBookmarkReload);
+}
+
+async function handleBookmarkReload(bookmarks) {
+  //compare with previous version
+  allBookmarks = bookmarks;
+
   const bookmarksList = document.getElementById("bookmarksList");
   bookmarksList.innerHTML = '';
   
-  browser.runtime.sendMessage({ action: "getBookmarkFolders", data: undefined }, function(bookmarks) {
-    recursivelyCreateBookmarkElementList(bookmarksList, bookmarks, 0);
-  });
+  saveBookmarks();
+
+  recursivelyCreateBookmarkElementList(bookmarksList, bookmarks, 0);
 }
 
 function recursivelyCreateBookmarkElementList(bookmarksList, bookmarks, index) {  
@@ -45,13 +53,56 @@ function createBookmarkElementList(bookmark, childIndex) {
   const input = document.createElement("input");
   input.setAttribute("type", "checkbox");
   input.setAttribute("name", bookmark.title);
+  input.setAttribute("id", bookmark.id);
+  if (bookmark.synced) {
+    input.setAttribute("checked", "");
+  }
 
   const label = document.createElement("label");
   label.setAttribute("for", bookmark.title);
   label.textContent = bookmark.title;
 
+  // input.addEventListener("change", function() { console.log(this.checked); })
+  input.addEventListener("change", function() { handleBookmarkClick(bookmark.id, this.checked); })
+
   divWrapper.appendChild(input);
   divWrapper.appendChild(label);
   
   return divWrapper;
+}
+function handleBookmarkClick(bookmarkId, checked) {
+  flattenBookmarkFolders(getBookmarksByParentId(bookmarkId)).forEach((bookmark) => {
+    const bookmarkElem = getBookmarkFolderById(bookmark.id);
+    bookmarkElem.checked = checked;
+    if (bookmark.parentId == bookmarkId && checked) {
+      bookmarkElem.style.opacity = 0.5;
+      bookmarkElem.style.pointerEvents = "none";
+    }
+    else if (bookmark.parentId == bookmarkId) {
+      bookmarkElem.style.opacity = 1;
+      bookmarkElem.style.pointerEvents = "unset";
+    }
+  });
+}
+function getBookmarkFolderById(bookmarkId) {
+  return document.getElementById(bookmarkId);
+} 
+function getBookmarksByParentId(parentId) {
+  return flattenBookmarkFolders(allBookmarks).filter(bookmark => bookmark.parentId === parentId);
+}
+function flattenBookmarkFolders(bookmarks) {
+   return bookmarks.map(bookmark => {
+    return flattenBookmarkFolders(bookmark.children).concat(bookmark);
+   }).flat();
+}
+function findBookmarkFolderChildren(bookmark) {
+  return bookmark.children.map(child => {
+    return findBookmarkFolderChildren(child).concat(child);
+  }).flat();
+}
+
+
+async function saveBookmarks() {
+  const bookmarkJson = JSON.stringify(allBookmarks, undefined, 2);
+  browser.storage.local.set({ bookmarks: bookmarkJson });
 }

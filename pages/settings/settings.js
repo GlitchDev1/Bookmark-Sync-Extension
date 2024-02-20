@@ -1,31 +1,15 @@
 document.addEventListener("DOMContentLoaded", async function () {
 
-    console.log("Before Loading");
-    await loadSavedValues();
+    await loadValues();
 
-    const tokenForm = document.getElementById("tokenForm");
-
-    tokenForm.addEventListener("submit", function (event) {
-        event.preventDefault();
-        const accessToken = document.getElementById("githubToken").value;
-        browser.storage.local.set({ "githubToken": accessToken });
-        setFieldSaved("Token");
-    });
-
-    const repoForm = document.getElementById("repoForm");
-
-    repoForm.addEventListener("submit", function (event) {
-        event.preventDefault();
-        const githubRepo = document.getElementById("githubRepo").value;
-        browser.storage.local.set({ "githubRepo": githubRepo });
-        setFieldSaved("Repo");
-    });
+    document.getElementById("tokenForm").addEventListener("submit", (event) => {saveValue("Token"); event.preventDefault();})
+    document.getElementById("repoForm").addEventListener("submit", (event) => {saveValue("Repo"); event.preventDefault(); })
 
     document.getElementById("editToken").addEventListener("click", () => setFieldEditable("Token"));
     document.getElementById("editRepo").addEventListener("click", () => setFieldEditable("Repo"));
 });
 
-async function loadSavedValues() {
+async function loadValues() {
 
     console.log("Loading values from localStorage");
     const repoInputField = document.getElementById("githubRepo");
@@ -41,6 +25,19 @@ async function loadSavedValues() {
         tokenInputField.value = localStorage.githubToken;
         setFieldSaved("Token");
     }
+
+    // Debugging
+    const bookmarkJsonText = document.getElementById("bookmarkJson");
+    bookmarkJsonText.innerHTML = localStorage.bookmarks;
+}
+function saveValue(fieldName) {
+    const fieldValue = document.getElementById("github" + fieldName).value;
+    if (fieldName == "Repo") {
+        browser.storage.local.set({ "githubRepo": fieldValue });
+    } else if (fieldName == "Token") {
+        browser.storage.local.set({ "githubToken": fieldValue });
+    }
+    setFieldSaved(fieldName);
 }
 function setFieldSaved(fieldName) {
     document.getElementById("github" + fieldName).

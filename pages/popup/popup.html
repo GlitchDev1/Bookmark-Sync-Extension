@@ -12,18 +12,20 @@
 <body>
   <div class="popup-wrapper">
     <h1>Bookmark Folder Sync</h1>
-    <form action="">
-      <ul id="bookmarksList" class="bookmarksList"></ul>
-      <div>
-        <button id="getBookmarksButton" type="button">Reload</button>
-        <button type="submit" id="saveBookmarks" name="bookmarks">
-        <label for="bookmarks">Save</label>
+      <ul id="bookmarksList" class="bookmarksList">
+        <!-- Here all bookmarks will be displayed -->
+      </ul>
+      <div class="button-wrapper">
+        <button id="getBookmarksButton">
+          Reload
+        </button>
+        <button id="saveBookmarks">
+          Sync
+        </button>
+        <button class="settings-button" id="settingButton">
+          <img src="../../icons/setting.png" alt="settings">
+        </button>
       </div>
-    </form>
-
-    <button class="settings-button" id="settingButton">
-      <img src="../../icons/setting.png" alt="settings">
-    </button>
   </div>
 </body>
 </html>

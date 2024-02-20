@@ -34,13 +34,13 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
 function getBookmarkFolders() {
   return browser.bookmarks.getSubTree("toolbar_____")
     .then((bookmarks) => {
-      const folders = extractFolders(bookmarks[0].children);
+      const folders = extractFolders(bookmarks[0].children, undefined);
       return folders;
     });
 }
 
 // Helper function to extract bookmark folders recursively
-function extractFolders(bookmarks) {
+function extractFolders(bookmarks, parentId) {
   let folders = [];
 
   bookmarks.forEach((bookmark) => {
@@ -48,10 +48,12 @@ function extractFolders(bookmarks) {
       folders.push({
         id: bookmark.id,
         title: bookmark.title,
+        synced: false,
+        parentId: parentId,
         children: []
       });
       if (bookmark.children) {
-        folders[folders.length - 1].children = extractFolders(bookmark.children);
+        folders[folders.length - 1].children = extractFolders(bookmark.children, bookmark.id);
       }
     }
   });
