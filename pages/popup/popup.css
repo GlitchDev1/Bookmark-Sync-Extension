@@ -22,3 +22,7 @@ h1 {
     width: 65%;
     position: absolute;
 }
+.checkbox-unclickable {
+    opacity: 0.6;
+    pointer-events: none;
+}

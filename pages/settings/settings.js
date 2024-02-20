@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 async function loadValues() {
 
-    console.log("Loading values from localStorage");
     const repoInputField = document.getElementById("githubRepo");
     const tokenInputField = document.getElementById("githubToken");
     

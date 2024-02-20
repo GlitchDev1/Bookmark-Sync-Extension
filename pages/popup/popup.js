@@ -1,8 +1,8 @@
-let allBookmarks = undefined;
+let allBookmarks = [];
 document.addEventListener("DOMContentLoaded", async function () {
   
-  loadBookmarks();
-  document.getElementById("getBookmarksButton").addEventListener("click", loadBookmarks);
+  initializeBookmarkLoad();
+  document.getElementById("getBookmarksButton").addEventListener("click", () => initializeBookmarkLoad);
 
   document.getElementById("settingButton")
     .addEventListener("click", async () => { await openSettings(); });
@@ -21,32 +21,51 @@ async function openSettings() {
   window.close();
 }
 
-async function loadBookmarks() {  
-  browser.runtime.sendMessage({ action: "getBookmarkFolders", data: undefined }, handleBookmarkReload);
+function initializeBookmarkLoad() {
+  browser.runtime.sendMessage({ action: "getBookmarkFolders", data: undefined }, handleBookmarkLoad);
 }
 
-async function handleBookmarkReload(bookmarks) {
-  //compare with previous version
-  allBookmarks = bookmarks;
+async function handleBookmarkLoad(bookmarks) {
+  //impl compare with previous version
 
+  const bookmarksFromLocalStorage = await loadBookmarks();
+  if (bookmarksFromLocalStorage === undefined) {
+    allBookmarks = bookmarks;
+  } else {
+    allBookmarks = JSON.parse(bookmarksFromLocalStorage);
+  }
+
+  console.log("Bookmark folders from browser: " + JSON.stringify(bookmarks));
+  console.log("Bookmark folders from localstorage: " + JSON.stringify(allBookmarks));
+  
+  renderBookmarkElements(allBookmarks);
+  saveBookmarks();
+}
+
+function renderBookmarkElements(bookmarks) {
   const bookmarksList = document.getElementById("bookmarksList");
   bookmarksList.innerHTML = '';
-  
-  saveBookmarks();
+
+  syncedParentFolderIds = [];
 
   recursivelyCreateBookmarkElementList(bookmarksList, bookmarks, 0);
 }
 
+let syncedParentFolderIds = [];
 function recursivelyCreateBookmarkElementList(bookmarksList, bookmarks, index) {  
   bookmarks.forEach(bookmark => {
-    bookmarksList.appendChild(createBookmarkElementList(bookmark, index));
+    bookmarksList.appendChild(createBookmarkElement(bookmark, index));
     if (bookmark.children.length > 0) {
       recursivelyCreateBookmarkElementList(bookmarksList, bookmark.children, index + 1);
     }
   });
 }
 
-function createBookmarkElementList(bookmark, childIndex) {
+function createBookmarkElement(bookmark, childIndex) {
+  if (bookmark.synced && bookmark.children.length > 0) {
+    syncedParentFolderIds.push(bookmark.id);
+  }
+
   const divWrapper = document.createElement("div");
   divWrapper.style.paddingLeft = childIndex * 20 + "px";
   
@@ -55,14 +74,16 @@ function createBookmarkElementList(bookmark, childIndex) {
   input.setAttribute("name", bookmark.title);
   input.setAttribute("id", bookmark.id);
   if (bookmark.synced) {
-    input.setAttribute("checked", "");
+    input.setAttribute("checked", "");syncedParentFolderIds
+  }
+  if (syncedParentFolderIds.includes(bookmark.parentId)) {
+    input.classList.add("checkbox-unclickable");
   }
 
   const label = document.createElement("label");
   label.setAttribute("for", bookmark.title);
   label.textContent = bookmark.title;
 
-  // input.addEventListener("change", function() { console.log(this.checked); })
   input.addEventListener("change", function() { handleBookmarkClick(bookmark.id, this.checked); })
 
   divWrapper.appendChild(input);
@@ -71,24 +92,17 @@ function createBookmarkElementList(bookmark, childIndex) {
   return divWrapper;
 }
 function handleBookmarkClick(bookmarkId, checked) {
-  flattenBookmarkFolders(getBookmarksByParentId(bookmarkId)).forEach((bookmark) => {
-    const bookmarkElem = getBookmarkFolderById(bookmark.id);
-    bookmarkElem.checked = checked;
-    if (bookmark.parentId == bookmarkId && checked) {
-      bookmarkElem.style.opacity = 0.5;
-      bookmarkElem.style.pointerEvents = "none";
-    }
-    else if (bookmark.parentId == bookmarkId) {
-      bookmarkElem.style.opacity = 1;
-      bookmarkElem.style.pointerEvents = "unset";
-    }
+  flattenBookmarkFolders(getBookmarksByParentId(bookmarkId, true)).forEach((bookmark) => {
+    bookmark.synced = checked;
+    renderBookmarkElements(allBookmarks);
   });
+  saveBookmarks();
 }
-function getBookmarkFolderById(bookmarkId) {
+function getBookmarkElementById(bookmarkId) {
   return document.getElementById(bookmarkId);
 } 
-function getBookmarksByParentId(parentId) {
-  return flattenBookmarkFolders(allBookmarks).filter(bookmark => bookmark.parentId === parentId);
+function getBookmarksByParentId(parentId, includeParent) {
+  return flattenBookmarkFolders(allBookmarks).filter(bookmark => bookmark.parentId === parentId || bookmark.id == parentId && includeParent);
 }
 function flattenBookmarkFolders(bookmarks) {
    return bookmarks.map(bookmark => {
@@ -101,7 +115,10 @@ function findBookmarkFolderChildren(bookmark) {
   }).flat();
 }
 
-
+async function loadBookmarks() {
+  const localStorage = await browser.storage.local.get();
+  return localStorage.bookmarks;
+}
 async function saveBookmarks() {
   const bookmarkJson = JSON.stringify(allBookmarks, undefined, 2);
   browser.storage.local.set({ bookmarks: bookmarkJson });
