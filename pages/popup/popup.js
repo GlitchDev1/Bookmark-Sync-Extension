@@ -94,8 +94,8 @@ function createBookmarkElement(bookmark, childIndex) {
 function handleBookmarkClick(bookmarkId, checked) {
   flattenBookmarkFolders(getBookmarksByParentId(bookmarkId, true)).forEach((bookmark) => {
     bookmark.synced = checked;
-    renderBookmarkElements(allBookmarks);
   });
+  renderBookmarkElements(allBookmarks);
   saveBookmarks();
 }
 function getBookmarkElementById(bookmarkId) {
