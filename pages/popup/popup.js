@@ -26,13 +26,11 @@ function initializeBookmarkLoad() {
 }
 
 async function handleBookmarkLoad(bookmarks) {
-  //impl compare with previous version
-
   const bookmarksFromLocalStorage = await loadBookmarks();
   if (bookmarksFromLocalStorage === undefined) {
     allBookmarks = bookmarks;
   } else {
-    allBookmarks = JSON.parse(bookmarksFromLocalStorage);
+    allBookmarks = combineBookmarks(JSON.parse(bookmarksFromLocalStorage), bookmarks);
   }
 
   console.log("Bookmark folders from browser: " + JSON.stringify(bookmarks));
@@ -104,15 +102,58 @@ function getBookmarkElementById(bookmarkId) {
 function getBookmarksByParentId(parentId, includeParent) {
   return flattenBookmarkFolders(allBookmarks).filter(bookmark => bookmark.parentId === parentId || bookmark.id == parentId && includeParent);
 }
+function findBookmarkFolderChildren(bookmark) {
+  return bookmark.children.map(child => {
+    return findBookmarkFolderChildren(child).concat(child);
+  }).flat();
+}
+
 function flattenBookmarkFolders(bookmarks) {
    return bookmarks.map(bookmark => {
     return flattenBookmarkFolders(bookmark.children).concat(bookmark);
    }).flat();
 }
-function findBookmarkFolderChildren(bookmark) {
-  return bookmark.children.map(child => {
-    return findBookmarkFolderChildren(child).concat(child);
-  }).flat();
+function unFlattenBookmarkFolders(flatBookmarks) {
+  const bookmarkMap = {};
+  flatBookmarks.forEach(bookmark => {
+    bookmarkMap[bookmark.id] = bookmark;
+  });
+
+  let unflatBookmarks = [];
+
+  unflatBookmarks = flatBookmarks.forEach(bookmark => {
+    // Get all the top level bookmarks
+    if (bookmark.parentId === undefined) {
+      bookmarkMap[bookmark.id].children.push(bookmark);
+    } else {
+      unflatBookmarks.push(bookmark);
+    }
+  
+  });
+
+  return unflatBookmarks.map(bookmark => bookmarkMap[bookmark.id]);
+
+  // unflatBookmarks = unflatBookmarks.map(bookmark => {
+  //   return getBookmarksByParentIdFromFlat(flatBookmarks, bookmark.id, true);
+  // });
+}
+function getBookmarksByParentIdFromFlat(flatBookmarks, parentId, includeParent) {
+  return flatBookmarks.filter(bookmark => bookmark.parentId === parentId || bookmark.id == parentId && includeParent);
+}
+
+
+function combineBookmarks(savedBookmarks, newBookmarks) {
+  const flatSavedBookmarks = flattenBookmarkFolders(savedBookmarks);
+  const flatNewBookmarks = flattenBookmarkFolders(newBookmarks);
+
+  const validSavedBookmarks = flatSavedBookmarks.filter(bookmark => containsId(flatNewBookmarks, bookmark.id)); //detect delted bookmarks
+  const validNewBookmarks = flatNewBookmarks.filter(bookmark => !containsId(validSavedBookmarks, bookmark.id)); //filter out only not saved bookmarks
+  
+  const combinedBookmarks = validSavedBookmarks.concat(validNewBookmarks);
+  return unFlattenBookmarkFolders(combinedBookmarks);
+}
+function containsId(flatBookmarks, id) {
+  return flatBookmarks.filter(bookmark => bookmark.id === id).length > 0;
 }
 
 async function loadBookmarks() {
