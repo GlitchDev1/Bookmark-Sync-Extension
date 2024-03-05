@@ -7,6 +7,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     document.getElementById("editToken").addEventListener("click", () => setFieldEditable("Token"));
     document.getElementById("editRepo").addEventListener("click", () => setFieldEditable("Repo"));
+
+    document.getElementById("resetBookmarks").addEventListener("click", () => resetBookmarks());
 });
 
 async function loadValues() {
@@ -55,4 +57,8 @@ function setFieldEditable(fieldName) {
         .classList.remove("hidden");
     document.getElementById("edit" + fieldName)
         .classList.add("hidden");
+}
+async function resetBookmarks() {
+    await browser.storage.local.set({ "bookmarks": [] });
+    loadValues();
 }
