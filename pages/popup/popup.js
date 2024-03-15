@@ -5,6 +5,8 @@ document.addEventListener("DOMContentLoaded", async function () {
   initializeBookmarkLoad();
   document.getElementById("reloadBookmarks").addEventListener("click", () => initializeBookmarkLoad);
 
+  document.getElementById("syncBookmarks").addEventListener("click", () => syncBookmarks);
+
   document.getElementById("settingButton")
     .addEventListener("click", async () => { await openSettings(); });
 
@@ -20,6 +22,11 @@ async function openSettings() {
     url: '/pages/settings/settings.html'
   });
   window.close();
+}
+
+function syncBookmarks() {
+  
+  //call background js to push to github
 }
 
 function initializeBookmarkLoad() {
