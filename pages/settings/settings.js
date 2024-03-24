@@ -2,22 +2,31 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     await loadValues();
 
+    document.getElementById("usernameForm").addEventListener("submit", (event) => {saveValue("Username"); event.preventDefault();})
     document.getElementById("tokenForm").addEventListener("submit", (event) => {saveValue("Token"); event.preventDefault();})
     document.getElementById("repoForm").addEventListener("submit", (event) => {saveValue("Repo"); event.preventDefault(); })
 
+    document.getElementById("editUsername").addEventListener("click", () => setFieldEditable("Username"));
     document.getElementById("editToken").addEventListener("click", () => setFieldEditable("Token"));
     document.getElementById("editRepo").addEventListener("click", () => setFieldEditable("Repo"));
 
     document.getElementById("resetBookmarks").addEventListener("click", () => resetBookmarks());
+
+    document.getElementById("debuggingTitle").addEventListener("click", () => toggleCollapsible());
 });
 
 async function loadValues() {
 
+    const usernameInputField = document.getElementById("githubUsername");
     const repoInputField = document.getElementById("githubRepo");
     const tokenInputField = document.getElementById("githubToken");
     
     const localStorage = await browser.storage.local.get();
 
+    if (localStorage.githubUsername !== undefined && localStorage.githubUsername !== "") {
+        usernameInputField.value = localStorage.githubUsername;
+        setFieldSaved("Username");
+    }
     if (localStorage.githubRepo !== undefined && localStorage.githubRepo !== "") {
         repoInputField.value = localStorage.githubRepo;
         setFieldSaved("Repo");
@@ -33,10 +42,16 @@ async function loadValues() {
 }
 function saveValue(fieldName) {
     const fieldValue = document.getElementById("github" + fieldName).value;
-    if (fieldName == "Repo") {
-        browser.storage.local.set({ "githubRepo": fieldValue });
-    } else if (fieldName == "Token") {
-        browser.storage.local.set({ "githubToken": fieldValue });
+    switch (fieldName) {
+        case "Username":
+            browser.storage.local.set({ "githubUsername": fieldValue });
+            break;
+        case "Repo":
+            browser.storage.local.set({ "githubRepo": fieldValue });
+            break;
+        case "Token":
+            browser.storage.local.set({ "githubToken": fieldValue });
+            break;
     }
     setFieldSaved(fieldName);
 }
@@ -61,4 +76,15 @@ function setFieldEditable(fieldName) {
 async function resetBookmarks() {
     await browser.storage.local.set({ "bookmarks": [] });
     loadValues();
+}
+
+let open = false;
+function toggleCollapsible() {
+    const collapsibleObj = document.getElementById("debuggingCollapsible");
+    if (open) {
+        collapsibleObj.classList.remove("collapsible-open");
+    } else {
+        collapsibleObj.classList.add("collapsible-open");
+    }
+    open = !open;
 }

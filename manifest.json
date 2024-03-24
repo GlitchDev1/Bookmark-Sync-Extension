@@ -5,7 +5,7 @@
     "description": "Sync selected bookmark folders over GitHub",
     "permissions": ["bookmarks", "storage"],
     "background": {
-      "scripts": ["./js/github.js", "background.js"]
+      "scripts": ["./js/github.js", "./js/background.js"]
     },
     "action": {
       "default_popup": "/pages/popup/popup.html",

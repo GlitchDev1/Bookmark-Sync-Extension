@@ -31,3 +31,45 @@ h1 {
     opacity: 0.6;
     pointer-events: none;
 }
+.settings-segment {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+.icon-button {
+    color: white;
+    display: flex;
+    padding-inline: 6.75px;
+    gap: 5px;
+}
+
+/*Debugging Area*/
+.bookmark-json {
+    max-height: 300px;
+    overflow: scroll;
+}
+.collapsible-title-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    cursor: pointer;
+}
+.collapsible-title-icon {
+    height: calc(100% - 20px);
+    transform: rotate(-90deg);
+    transition: transform 0.3s ease;
+}
+.collapsible .collapsible-content {
+    height: 0;
+    overflow: hidden;
+    transition: height 0.3s ease-out;
+}
+.collapsible-open .collapsible-content {
+    height: 300px !important;
+    transition: height 0.3s ease-out;
+}
+.collapsible-open .collapsible-title-icon {
+    transform: rotate(0deg);
+}

@@ -18,28 +18,76 @@
             <h1>
                 Settings
             </h1>
-            <form id="tokenForm" class="settings-form" onsubmit="return false">
-                <label for="githubToken">GitHub Access Token</label>
-                <input type="text" id="githubToken" name="githubToken">
-                <button id="saveToken" type="submit">Save</button>
-                <button id="editToken" class="hidden" type="button">Edit</button>
-            </form>
-            <form id="repoForm" class="settings-form" onsubmit="return false">
-                <label for="githubRepo">GitHub Repository</label>
-                <input type="text" id="githubRepo" name="githubRepo">
-                <button id="saveRepo" type="submit">Save</button>
-                <button id="editRepo" class="hidden" type="button">Edit</button>
-            </form>
+
+            <p>
+                If you are new to this extension please read the 
+                <a href="/pages/instructions/instructions.html">
+                    instructions.
+                </a>
+            </p>
 
             <h2>
-                Debugging
+                Setup
             </h2>
-            <pre id="bookmarkJson" style="max-height: 300px; overflow: scroll;">
-                Loading JSON...
-            </pre>
-            <button id="resetBookmarks">
-                Reset Bookmarks
-            </button>
+            <div class="settings-segment">
+                <form id="usernameForm" class="settings-form" onsubmit="return false">
+                    <label for="githubUsername">GitHub Username</label>
+                    <input type="text" id="githubUsername" name="githubUsername">
+                    <button id="saveUsername" type="submit">Save</button>
+                    <button id="editUsername" class="icon-button hidden" type="button">
+                        <svg height="17px" width="17px">
+                            <use href="../../svg/pen.svg#pen"></use>
+                        </svg>
+                    </button>
+                </form>
+                <form id="tokenForm" class="settings-form" onsubmit="return false">
+                    <label for="githubToken">GitHub Access Token</label>
+                    <input type="password" id="githubToken" name="githubToken">
+                    <button id="saveToken" type="submit">Save</button>
+                    <button id="editToken" class="icon-button hidden" type="button">
+                        <svg height="17px" width="17px">
+                            <use href="../../svg/pen.svg#pen"></use>
+                        </svg>
+                    </button>
+                </form>
+                <form id="repoForm" class="settings-form" onsubmit="return false">
+                    <label for="githubRepo">GitHub Repository</label>
+                    <input type="text" id="githubRepo" name="githubRepo">
+                    <button id="saveRepo" type="submit">Save</button>
+                    <button id="editRepo" class="icon-button hidden" type="button">
+                        <svg height="17px" width="17px">
+                            <use href="../../svg/pen.svg#pen"></use>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+            
+            <h2>
+                Overrides
+            </h2>
+            <div class="settings-segment">
+                <button id="resetBookmarks">
+                    Reset Bookmarks
+                </button>
+                
+                <button id="">
+                    Override Github Repo (to be implemented)
+                </button>
+            </div>
+
+            <div class="collapsible" id="debuggingCollapsible">
+                <div class="collapsible-title-wrapper" id="debuggingTitle">
+                    <img src="../../svg/arrow.svg" class="collapsible-title-icon">
+                    <h2 class="collapsible-title">
+                        Debugging
+                    </h2>
+                </div>
+                <div class="collapsible-content">
+                    <pre class="bookmark-json" id="bookmarkJson">
+                        Loading JSON...
+                    </pre>
+                </div>
+            </div>
         </div>
     </div>
 </body>

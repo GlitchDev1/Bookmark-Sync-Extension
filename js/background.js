@@ -1,4 +1,3 @@
-import { createGithubCommit } from './js/github';
 // This script runs in the background and interacts with bookmarks API
 
 // Event listener for when the extension is installed or updated
@@ -25,9 +24,6 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   console.log('Message received:', message, 'from sender:', sender);
   if (message.action == "getBookmarkFolders") {
     sendResponse(getBookmarkFolders());
-  }
-  else if (message.action == "syncBookmarks") {
-    saveOnGithub();
   }
 });
 
@@ -60,20 +56,4 @@ function extractFolders(bookmarks, parentId) {
   });
 
   return folders;
-}
-
-function saveOnGithub() {
-  const accessToken = "";
-  const repoName = "TestRepo";
-  const branch = "main";
-  const commitMessage = "Updated Bookmarks";
-  const content = [
-    {
-      path: "/.bookmark-sync/bookmarks.json",
-      content: '{ "Test": "Value" }',
-      encoding: "utf-8"
-    }
-  ];
-
-  createGithubCommit(accessToken, repoName, branch, commitMessage, content);
 }

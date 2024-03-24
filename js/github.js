@@ -1,8 +1,35 @@
-export const createGithubCommit = async (githubAccessToken,
+// Event listener for messages from content scripts or other parts of the extension
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    console.log('Message received:', message, 'from sender:', sender);
+    if (message.action == "syncBookmarks") {
+      saveOnGithub();
+    }
+});
+
+function saveOnGithub() {
+    const accessToken = "";
+    const fullRepoName = "GlitchDev1/TestRepo";
+    const branch = "main";
+    const commitMessage = "Updated Bookmarks";
+    const content = [
+      {
+        path: "/.bookmark-sync/bookmarks.json",
+        content: '{ "Test": "Value" }',
+        encoding: "utf-8"
+      }
+    ];
+
+    console.log("Should start commit.");
+    createGithubCommit(accessToken, fullRepoName, branch, commitMessage, content);
+}
+
+const createGithubCommit = async (githubAccessToken,
     repoFullName,
     branchName,
     commitMessage,
     articleFiles) => {
+
+    console.log("Reached commit function");
     const tree = await createGithubRepoTree(githubAccessToken, repoFullName, branchName, articleFiles)
     const parentSha = await getParentSha(githubAccessToken, repoFullName, branchName)
 
@@ -126,6 +153,8 @@ const updateGithubBranchRef = async (githubAccessToken, repoFullName, branchName
         "sha": commitSha,
         "force": false
     }
+
+    console.log("Should now be pushing to github");
 
     const response = await fetch(`https://api.github.com/repos/${repoFullName}/git/refs/heads/${branchName}`,
         {

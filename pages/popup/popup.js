@@ -5,13 +5,18 @@ document.addEventListener("DOMContentLoaded", async function () {
   initializeBookmarkLoad();
   document.getElementById("reloadBookmarks").addEventListener("click", () => initializeBookmarkLoad);
 
-  document.getElementById("syncBookmarks").addEventListener("click", () => syncBookmarks);
+  document.getElementById("syncBookmarks").addEventListener("click", () => { syncBookmarks(); });
 
   document.getElementById("settingButton")
     .addEventListener("click", async () => { await openSettings(); });
 
   const localStorage = await browser.storage.local.get();
-  if (localStorage.githubRepo === undefined || localStorage.githubRepo === "" || localStorage.githubToken === undefined || localStorage.githubToken === "") {
+  
+  const usernameEntered = localStorage.githubUsername !== undefined && localStorage.githubUsername !== "";
+  const tokenEntered = localStorage.githubToken !== undefined && localStorage.githubToken !== "";
+  const repoEntered = localStorage.githubRepo !== undefined && localStorage.githubRepo !== "";
+  
+  if (!usernameEntered || !tokenEntered || !repoEntered) {
     await openSettings();
   }
 });
@@ -25,8 +30,8 @@ async function openSettings() {
 }
 
 function syncBookmarks() {
-  
-  //call background js to push to github
+  console.log("Click!");
+  browser.runtime.sendMessage({ action: "syncBookmarks", data: undefined });
 }
 
 function initializeBookmarkLoad() {

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instructions | Bookmark Folder Sync</title>
+    <link rel="stylesheet" href="./instructions.css">
+    
+    <link rel="icon" href="../../icons/icon-128.png">
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../../common-shared.css">
+</head>
+<body>
+    <div class="window-wrapper">
+        <div class="window">
+            <h1>
+                Instructions
+            </h1>
+            <p>
+                This site will guide you through the whole process of
+                syncing your bookmarks via GitHub repository.
+            </p>
+
+
+            <h2>
+                Setup GitHub Repository
+            </h2>
+            <p>
+                <ol>
+                    <li>
+                        Create an account on
+                        <a href="https://github.com/signup">
+                            GitHub
+                        </a>
+                    </li>
+                    <li>
+                        Create a <b>private</b> repository on GitHub (maybe we can skip this part as extension is creating it)
+                    </li>
+                    <li>
+                        Create a personal access token with
+                        <a href="https://github.com/settings/tokens/new?description=Bookmark+Sync+Token&scopes=repo&expiration=none" target="_blank">
+                            repository read & write
+                        </a>
+                        and set <b>expiration to none</b>, otherwise the extension will stop working
+                    </li>
+                    <li>
+                        Copy the token to clipboard, as it's the only time GitHub will display it
+                    </li>
+                </ol>
+            </p>
+
+            <h2>
+                Configure Extension
+            </h2>
+            <p>
+                <ol>
+                    <li>
+                        Open the
+                        <a href="/pages/settings/settings.html">
+                            settings
+                        </a>
+                    </li>
+                    <li>
+                        Enter your GitHub username
+                    </li>
+                    <li>
+                        Paste in your access token
+                    </li>
+                    <li>
+                        Enter a repository name
+                    </li>
+                </ol>
+
+                Now you are good to go with this extension.
+            </p>
+
+            <h2>
+                How to use
+            </h2>
+            <p>
+                To sync your bookmarks, simply open the extension popup,
+                then select all the bookmark folders you want to have synced.
+                <br><br>
+                From now on every bookmark that gets added into a synced folder will be automatically synced. 
+                <br><br>
+                After that just click Sync and your bookmarks are uploaded.
+                On a different device 
+            </p>
+
+            <h2>
+                Troubleshooting
+            </h2>
+            <p>
+                If you have any problems with extension or the github repository you can use the reset/ override buttons in the settings.
+            </p>
+
+            <h2>
+                Backup
+            </h2>
+            <p>
+                NOT IMPLEMENTED YET <br><br>
+
+                This extension will create a backup of you bookmarks, just in case it modifies them unwanted. 
+            </p>
+        </div>
+    </div>
+</body>
+</html>
