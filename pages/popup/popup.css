@@ -1,8 +1,9 @@
 .popup-wrapper {
     padding: 20px 35px;
 }
-h1 {
-    margin-top: 0;
+.bookmarksList {
+    display: flex;
+    flex-direction: column;
 }
 .button-wrapper {
     display: flex;

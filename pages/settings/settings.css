@@ -1,27 +1,11 @@
 body {
     padding: 0;
 }
-.window-wrapper {
-    height: 100vh;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.window {
-    width: 500px;
-    background: var(--in-content-table-background);
-    border-radius: 15px;
-    padding: 25px;
-    filter: drop-shadow(3px 3px 5px rgb(21, 21, 21));
-}
-h1 {
-    margin-top: 0;
-}
 .settings-form {
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    position: relative;
 }
 .settings-form label {
     width: 175px;
@@ -36,6 +20,18 @@ h1 {
     display: flex;
     flex-direction: column;
 }
+.reveal-password-button {
+    appearance: none;
+    color: white;
+    background-image: url(../../svg/eye.svg);
+    position: absolute;
+    left: 350px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.reveal-password-button:hover {
+    filter: brightness(80%);
+}
 .icon-button {
     color: white;
     display: flex;
@@ -43,7 +39,6 @@ h1 {
     gap: 5px;
 }
 
-/*Debugging Area*/
 .bookmark-json {
     max-height: 300px;
     overflow: scroll;
@@ -62,12 +57,12 @@ h1 {
     transition: transform 0.3s ease;
 }
 .collapsible .collapsible-content {
-    height: 0;
+    max-height: 0;
     overflow: hidden;
     transition: height 0.3s ease-out;
 }
 .collapsible-open .collapsible-content {
-    height: 300px !important;
+    max-height: 300px !important;
     transition: height 0.3s ease-out;
 }
 .collapsible-open .collapsible-title-icon {
