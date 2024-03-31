@@ -68,6 +68,8 @@ function setFieldSaved(fieldName) {
     if (fieldName == "Token") {
         document.getElementById("githubToken").setAttribute("type", "password");
     }
+
+    document.getElementById("edit" + fieldName).focus();
 }
 function setFieldEditable(fieldName) {
     const inputField = document.getElementById("github" + fieldName);
