@@ -1,7 +1,7 @@
 // Event listener for messages from content scripts or other parts of the extension
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.action == "syncBookmarks") {
-      saveOnGithub();
+    if (message.action == "pushToGithub") {
+      saveOnGithub(message.data);
     }
 });
 

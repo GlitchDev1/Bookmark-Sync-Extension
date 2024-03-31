@@ -25,6 +25,10 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action == "getBookmarkFolders") {
     sendResponse(getBookmarkFolders());
   }
+  else if (message.action == "syncBookmarks") {
+    const bookmarksToSync = something;
+    browser.runtime.sendMessage({ action: "pushToGithub", data: bookmarksToSync });
+  }
 });
 
 // Function to get bookmark folders
@@ -56,4 +60,75 @@ function extractFolders(bookmarks, parentId) {
   });
 
   return folders;
+}
+
+
+async function getBookmarksToSync() {
+  const localstorage = await browser.storage.local.get();
+
+  const allBookmarkFolders = localstorage.bookmarks;
+  const allBookmarkFoldersToSync = 
+}
+
+function updateBookmarks(newBookmarks) {
+
+}
+
+
+// Helper functions
+
+async function getAllBookmarks() {
+  return await browser.bookmarks.getSubTree("toolbar_____");
+}
+function getSyncedOnlyFoldersRecursively(allFolders) {
+  const allBookmarks = getAllBookmarks();
+
+  
+}
+
+function populateBookmarkFoldersWithBookmarks(bookmarkFolders, allBookmarks) {
+
+}
+
+// Returns Object of type:
+// {
+//    bool fullyUnsynced, bookmark[] bookmarks
+// }
+
+function recusivelyRemoveNotSyncedFolder(folderToCheck) {
+  if (folderToCheck.childern.length == 0 && folderToCheck) {
+    return {
+      fullyUnsynced: true,
+      bookmarks: undefined,
+    }
+  }
+  else {
+    folderToCheck.children.forEach(bookmarks => {
+      const childResult = recusivelyRemoveNotSyncedFolder(bookmarks);
+      if (childResult.fullyUnsynced) {
+        return 
+      }
+    })
+    return {
+
+    }
+  }
+}
+
+// Helper Function's Helper Functions
+function flatten(bookmarks) {
+  return bookmarks.map(bookmark => {
+    const flatChildren = flatten(bookmark.children);
+    const parentBookmark = createCopy(bookmark);
+    parentBookmark.children = [];
+    return flatChildren.concat(parentBookmark);
+  }).flat();
+}
+function toMap(bookmarks) {
+  const bookmarksCopy = createCopy(bookmarks);
+  const bookmarkMap = new Map();
+  if (bookmarksCopy !== undefined) {
+    flatten(bookmarksCopy).forEach((bookmark) => bookmarkMap.set(bookmark.id, bookmark));
+  }
+  return bookmarkMap;
 }

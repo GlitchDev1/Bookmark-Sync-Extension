@@ -30,8 +30,7 @@ async function openSettings() {
 }
 
 function syncBookmarks() {
-  console.log("Click!");
-  browser.runtime.sendMessage({ action: "syncBookmarks", data: undefined });
+  browser.runtime.sendMessage({ action: "syncBookmarks", data: allBookmarks });
 }
 
 function initializeBookmarkLoad() {
