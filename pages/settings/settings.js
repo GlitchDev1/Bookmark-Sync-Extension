@@ -2,6 +2,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     await loadValues();
 
+    document.getElementById("revealToken").addEventListener("change", () => toggleTokenReveal(this.checked) );
+
     document.getElementById("usernameForm").addEventListener("submit", (event) => {saveValue("Username"); event.preventDefault();})
     document.getElementById("tokenForm").addEventListener("submit", (event) => {saveValue("Token"); event.preventDefault();})
     document.getElementById("repoForm").addEventListener("submit", (event) => {saveValue("Repo"); event.preventDefault(); })
@@ -62,6 +64,10 @@ function setFieldSaved(fieldName) {
         .classList.add("hidden");
     document.getElementById("edit" + fieldName)
         .classList.remove("hidden");
+
+    if (fieldName == "Token") {
+        document.getElementById("githubToken").setAttribute("type", "password");
+    }
 }
 function setFieldEditable(fieldName) {
     const inputField = document.getElementById("github" + fieldName);
@@ -87,4 +93,9 @@ function toggleCollapsible() {
         collapsibleObj.classList.add("collapsible-open");
     }
     open = !open;
+}
+function toggleTokenReveal() {
+    const tokenInput = document.getElementById("githubToken");
+    const shown = tokenInput.getAttribute("type") == "text";
+    tokenInput.setAttribute("type", shown ? "password" : "text");
 }
