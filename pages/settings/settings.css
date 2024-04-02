@@ -20,12 +20,17 @@ body {
     display: flex;
     flex-direction: column;
 }
+.input-reveal-wrapper {
+    position: relative;
+}
 .reveal-password-button {
     appearance: none;
     color: white;
     background-image: url(../../svg/eye.svg);
     position: absolute;
-    left: 350px;
+    right: 9px;
+    top: 0px;
+    transform: translateY(55%);
     cursor: pointer;
     transition: 0.2s;
 }
